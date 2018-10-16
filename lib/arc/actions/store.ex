@@ -60,6 +60,10 @@ defmodule Arc.Actions.Store do
     end
   end
 
+  defp storage_filename_override do
+    Application.get_env(:arc, :storage_filename_override) || false
+  end
+
   defp version_timeout do
     Application.get_env(:arc, :version_timeout) || 15_000
   end
