@@ -51,12 +51,18 @@ defmodule Arc.Actions.Store do
   defp handle_responses(responses, filename) do
     errors = Enum.filter(responses, fn(resp) -> elem(resp, 0) == :error end) |> Enum.map(fn(err) -> elem(err, 1) end)
     cond do
-      storage_filename_override() ->
-        {:ok, elem(Enum.at(responses, 0), 1)}
       Enum.empty?(errors) ->
-        {:ok, filename}
+        response_filename(responses, filename)
       true ->
         {:error, errors}
+    end
+  end
+
+  defp response_filename(responses, filename) do
+    if storage_filename_override() do
+      {:ok, elem(Enum.at(responses, 0), 1)}
+    else
+      {:ok, filename}
     end
   end
 
